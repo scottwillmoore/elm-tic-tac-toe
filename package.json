@@ -1,0 +1,9 @@
+{
+  "name": "elm-tic-tac-toe",
+  "version": "1.0.0",
+  "description": "An implementation of the game Tic-Tac-Toe in Elm",
+  "main": "index.js",
+  "repository": "https://github.com/scottwillmoore/elm-tic-tac-toe",
+  "author": "Scott Moore <scott.will.moore@gmail.com>",
+  "license": "MIT"
+}
