@@ -4,9 +4,9 @@ An implementation of the game Tic-Tac-Toe in Elm.
 
 ## Features
 
-❌ ️ Create a build script to deploy to the `dist` directory.
+❌ ️Create a build script to deploy to the `dist` directory.
 
-❌ ️ Create a deploy script to deploy to the `gh-pages` branch.
+❌ ️Create a deploy script to deploy to the `gh-pages` branch.
 
 ❌ Display the Tic-Tac-Toe board.
 
