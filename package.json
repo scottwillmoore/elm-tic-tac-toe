@@ -1,9 +1,20 @@
 {
-  "name": "elm-tic-tac-toe",
-  "version": "1.0.0",
-  "description": "An implementation of the game Tic-Tac-Toe in Elm",
-  "main": "index.js",
-  "repository": "https://github.com/scottwillmoore/elm-tic-tac-toe",
-  "author": "Scott Moore <scott.will.moore@gmail.com>",
-  "license": "MIT"
+    "name": "elm-tic-tac-toe",
+    "version": "1.0.0",
+    "description": "An implementation of the game Tic-Tac-Toe in Elm",
+    "main": "index.js",
+    "repository": "https://github.com/scottwillmoore/elm-tic-tac-toe",
+    "author": "Scott Moore <scott.will.moore@gmail.com>",
+    "license": "MIT",
+    "scripts": {
+        "clean": "shx rm dist/app.js",
+        "debug": "elm-live src/Main.elm --output=dist/app.js --debug --path-to-elm-make=node_modules/.bin/elm-make --dir=dist",
+        "build": "elm-make src/Main.elm --output=dist/app.js",
+        "deploy": ""
+    },
+    "devDependencies": {
+        "elm": "^0.18.0",
+        "elm-live": "^2.7.5",
+        "shx": "^0.2.2"
+    }
 }
