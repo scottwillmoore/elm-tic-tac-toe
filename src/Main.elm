@@ -2,6 +2,7 @@ module Main exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (..)
+import Html.Attributes exposing (..)
 
 
 main : Program Never Model Msg
@@ -36,9 +37,12 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ toString model |> text
-        , button [ onClick Increment ] [ text "Increment" ]
+    div [ class "app" ]
+        [ h1 [] [ text "Tic-Tac-Toe" ]
+        , div [ class "board" ]
+            (List.range 1 9
+                |> List.map (\i -> div [ class "square" ] [ text (toString i) ])
+            )
         ]
 
 
