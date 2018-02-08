@@ -12422,19 +12422,98 @@ var _user$project$Main$subscriptions = function (model) {
 var _user$project$Main$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
-		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					tiles: A3(_elm_lang$core$Dict$insert, _p0._0, _p0._1, model.tiles)
+				}),
+			_1: _elm_lang$core$Platform_Cmd$none
+		};
 	});
-var _user$project$Main$toString = function (tile) {
-	var _p1 = tile;
-	switch (_p1.ctor) {
-		case 'X':
-			return 'X';
-		case 'O':
-			return 'O';
-		default:
-			return '';
+var _user$project$Main$defaultModel = {tiles: _elm_lang$core$Dict$empty};
+var _user$project$Main$init = {ctor: '_Tuple2', _0: _user$project$Main$defaultModel, _1: _elm_lang$core$Platform_Cmd$none};
+var _user$project$Main$positions = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: -1, _1: -1},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 0, _1: -1},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 1, _1: -1},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: -1, _1: 0},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 0, _1: 0},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 1, _1: 0},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: -1, _1: 1},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 0, _1: 1},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 1, _1: 1},
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 };
+var _user$project$Main$Board = function (a) {
+	return {tiles: a};
+};
+var _user$project$Main$O = {ctor: 'O'};
+var _user$project$Main$X = {ctor: 'X'};
+var _user$project$Main$Fill = F2(
+	function (a, b) {
+		return {ctor: 'Fill', _0: a, _1: b};
+	});
+var _user$project$Main$toDom = F2(
+	function (tiles, position) {
+		var tile = A2(_elm_lang$core$Dict$get, position, tiles);
+		var _p1 = tile;
+		if (_p1.ctor === 'Nothing') {
+			return A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('tile'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(
+							A2(_user$project$Main$Fill, position, _user$project$Main$X)),
+						_1: {ctor: '[]'}
+					}
+				},
+				{ctor: '[]'});
+		} else {
+			return A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('tile'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						_elm_lang$core$Basics$toString(_p1._0)),
+					_1: {ctor: '[]'}
+				});
+		}
+	});
 var _user$project$Main$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -12464,49 +12543,19 @@ var _user$project$Main$view = function (model) {
 					},
 					A2(
 						_elm_lang$core$List$map,
-						function (i) {
-							return A2(
-								_elm_lang$html$Html$div,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('tile'),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text(
-										_user$project$Main$toString(i)),
-									_1: {ctor: '[]'}
-								});
-						},
-						model.squares)),
+						_user$project$Main$toDom(model.tiles),
+						_user$project$Main$positions)),
 				_1: {ctor: '[]'}
 			}
 		});
 };
-var _user$project$Main$Model = function (a) {
-	return {squares: a};
-};
-var _user$project$Main$Blank = {ctor: 'Blank'};
-var _user$project$Main$defaultModel = {
-	squares: A2(
-		_elm_lang$core$List$map,
-		function (i) {
-			return _user$project$Main$Blank;
-		},
-		A2(_elm_lang$core$List$range, 1, 9))
-};
-var _user$project$Main$init = {ctor: '_Tuple2', _0: _user$project$Main$defaultModel, _1: _elm_lang$core$Platform_Cmd$none};
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();
-var _user$project$Main$O = {ctor: 'O'};
-var _user$project$Main$X = {ctor: 'X'};
-var _user$project$Main$Step = {ctor: 'Step'};
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"message":"Main.Msg","aliases":{},"unions":{"Main.Msg":{"tags":{"Step":[]},"args":[]}}},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"message":"Main.Msg","aliases":{"Main.Position":{"type":"( Int, Int )","args":[]}},"unions":{"Main.Msg":{"tags":{"Fill":["Main.Position","Main.Player"]},"args":[]},"Main.Player":{"tags":{"O":[],"X":[]},"args":[]}}},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

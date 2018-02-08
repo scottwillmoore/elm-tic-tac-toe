@@ -3,6 +3,7 @@ module Main exposing (..)
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
+import Dict exposing (Dict)
 
 
 main : Program Never Model Msg
@@ -15,33 +16,32 @@ main =
         }
 
 
-type Tile
+type Player
     = X
     | O
-    | Blank
 
 
-toString : Tile -> String
-toString tile =
-    case tile of
-        X ->
-            "X"
+type alias Position =
+    ( Int, Int )
 
-        O ->
-            "O"
 
-        Blank ->
-            ""
+positions : List Position
+positions =
+    [ ( -1, -1 ), ( 0, -1 ), ( 1, -1 ), ( -1, 0 ), ( 0, 0 ), ( 1, 0 ), ( -1, 1 ), ( 0, 1 ), ( 1, 1 ) ]
+
+
+type alias Board =
+    { tiles : Dict Position Player
+    }
 
 
 type alias Model =
-    { squares : List Tile
-    }
+    Board
 
 
 defaultModel : Model
 defaultModel =
-    { squares = List.range 1 9 |> List.map (\i -> Blank)
+    { tiles = Dict.empty
     }
 
 
@@ -51,14 +51,28 @@ init =
 
 
 type Msg
-    = Step
+    = Fill Position Player
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Step ->
-            ( model, Cmd.none )
+        Fill position player ->
+            ( { model | tiles = Dict.insert position player model.tiles }, Cmd.none )
+
+
+toDom : Dict Position Player -> Position -> Html Msg
+toDom tiles position =
+    let
+        tile =
+            Dict.get position tiles
+    in
+        case tile of
+            Nothing ->
+                div [ class "tile", onClick (Fill position X) ] []
+
+            Just player ->
+                div [ class "tile" ] [ text (toString player) ]
 
 
 view : Model -> Html Msg
@@ -66,9 +80,7 @@ view model =
     div [ class "app" ]
         [ h1 [] [ text "Tic-Tac-Toe" ]
         , div [ class "board" ]
-            (model.squares
-                |> List.map (\i -> div [ class "tile" ] [ text (toString i) ])
-            )
+            (List.map (toDom model.tiles) positions)
         ]
 
 
