@@ -12419,6 +12419,22 @@ var _elm_lang$html$Html_Events$Options = F2(
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+	});
+var _user$project$Main$toString = function (tile) {
+	var _p1 = tile;
+	switch (_p1.ctor) {
+		case 'X':
+			return 'X';
+		case 'O':
+			return 'O';
+		default:
+			return '';
+	}
+};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -12453,35 +12469,44 @@ var _user$project$Main$view = function (model) {
 								_elm_lang$html$Html$div,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('square'),
+									_0: _elm_lang$html$Html_Attributes$class('tile'),
 									_1: {ctor: '[]'}
 								},
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html$text(
-										_elm_lang$core$Basics$toString(i)),
+										_user$project$Main$toString(i)),
 									_1: {ctor: '[]'}
 								});
 						},
-						A2(_elm_lang$core$List$range, 1, 9))),
+						model.squares)),
 				_1: {ctor: '[]'}
 			}
 		});
 };
-var _user$project$Main$update = F2(
-	function (msg, model) {
-		var _p0 = msg;
-		return {ctor: '_Tuple2', _0: model + 1, _1: _elm_lang$core$Platform_Cmd$none};
-	});
-var _user$project$Main$init = {ctor: '_Tuple2', _0: 0, _1: _elm_lang$core$Platform_Cmd$none};
+var _user$project$Main$Model = function (a) {
+	return {squares: a};
+};
+var _user$project$Main$Blank = {ctor: 'Blank'};
+var _user$project$Main$defaultModel = {
+	squares: A2(
+		_elm_lang$core$List$map,
+		function (i) {
+			return _user$project$Main$Blank;
+		},
+		A2(_elm_lang$core$List$range, 1, 9))
+};
+var _user$project$Main$init = {ctor: '_Tuple2', _0: _user$project$Main$defaultModel, _1: _elm_lang$core$Platform_Cmd$none};
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();
-var _user$project$Main$Increment = {ctor: 'Increment'};
+var _user$project$Main$O = {ctor: 'O'};
+var _user$project$Main$X = {ctor: 'X'};
+var _user$project$Main$Step = {ctor: 'Step'};
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"message":"Main.Msg","aliases":{},"unions":{"Main.Msg":{"tags":{"Increment":[]},"args":[]}}},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"message":"Main.Msg","aliases":{},"unions":{"Main.Msg":{"tags":{"Step":[]},"args":[]}}},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

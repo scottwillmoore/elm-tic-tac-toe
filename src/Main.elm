@@ -15,24 +15,50 @@ main =
         }
 
 
-init : ( Model, Cmd Msg )
-init =
-    ( 0, Cmd.none )
+type Tile
+    = X
+    | O
+    | Blank
+
+
+toString : Tile -> String
+toString tile =
+    case tile of
+        X ->
+            "X"
+
+        O ->
+            "O"
+
+        Blank ->
+            ""
 
 
 type alias Model =
-    Int
+    { squares : List Tile
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { squares = List.range 1 9 |> List.map (\i -> Blank)
+    }
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( defaultModel, Cmd.none )
 
 
 type Msg
-    = Increment
+    = Step
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Increment ->
-            ( model + 1, Cmd.none )
+        Step ->
+            ( model, Cmd.none )
 
 
 view : Model -> Html Msg
@@ -40,8 +66,8 @@ view model =
     div [ class "app" ]
         [ h1 [] [ text "Tic-Tac-Toe" ]
         , div [ class "board" ]
-            (List.range 1 9
-                |> List.map (\i -> div [ class "square" ] [ text (toString i) ])
+            (model.squares
+                |> List.map (\i -> div [ class "tile" ] [ text (toString i) ])
             )
         ]
 

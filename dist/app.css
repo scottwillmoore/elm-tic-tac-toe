@@ -18,7 +18,7 @@ body {
     grid-gap: 10px;
 }
 
-.square {
+.tile {
     display: flex;
     align-items: center;
     justify-content: center;
