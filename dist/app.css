@@ -17,6 +17,7 @@ body {
     grid-template-rows: repeat(3, 1fr);
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
+    background: #eeeeee;
 }
 
 @media screen and (max-width: 1000px) {
@@ -30,5 +31,5 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #eeeeee;
+    background: #ffffff;
 }
