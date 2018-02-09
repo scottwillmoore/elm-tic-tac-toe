@@ -53,20 +53,24 @@ init =
 
 
 type Msg
-    = Play Position
+    = Reset
+    | Play Position
     | Fill Position Player
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        Reset ->
+            (defaultModel, Cmd.none)
+
         Play position ->
             let
-                player = case model.turn of
+                nextTurn = case model.turn of
                     X -> O
                     O -> X
             in
-                update (Fill position player) { model | turn = player }
+                update (Fill position nextTurn) { model | turn = nextTurn }
 
         Fill position player ->
             ( { model | tiles = Dict.insert position player model.tiles }, Cmd.none )
@@ -89,7 +93,7 @@ toDom tiles position =
 view : Model -> Html Msg
 view model =
     div [ class "app" ]
-        [ h1 [] [ text "Tic-Tac-Toe" ]
+        [ h1 [ onClick Reset ] [ text "Tic-Tac-Toe" ]
         , div [ class "board" ]
             (List.map (toDom model.tiles) positions)
         ]

@@ -12473,32 +12473,35 @@ var _user$project$Main$update = F2(
 		update:
 		while (true) {
 			var _p0 = msg;
-			if (_p0.ctor === 'Play') {
-				var player = function () {
-					var _p1 = model.turn;
-					if (_p1.ctor === 'X') {
-						return _user$project$Main$O;
-					} else {
-						return _user$project$Main$X;
-					}
-				}();
-				var _v2 = A2(_user$project$Main$Fill, _p0._0, player),
-					_v3 = _elm_lang$core$Native_Utils.update(
-					model,
-					{turn: player});
-				msg = _v2;
-				model = _v3;
-				continue update;
-			} else {
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
+			switch (_p0.ctor) {
+				case 'Reset':
+					return {ctor: '_Tuple2', _0: _user$project$Main$defaultModel, _1: _elm_lang$core$Platform_Cmd$none};
+				case 'Play':
+					var nextTurn = function () {
+						var _p1 = model.turn;
+						if (_p1.ctor === 'X') {
+							return _user$project$Main$O;
+						} else {
+							return _user$project$Main$X;
+						}
+					}();
+					var _v2 = A2(_user$project$Main$Fill, _p0._0, nextTurn),
+						_v3 = _elm_lang$core$Native_Utils.update(
 						model,
-						{
-							tiles: A3(_elm_lang$core$Dict$insert, _p0._0, _p0._1, model.tiles)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+						{turn: nextTurn});
+					msg = _v2;
+					model = _v3;
+					continue update;
+				default:
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								tiles: A3(_elm_lang$core$Dict$insert, _p0._0, _p0._1, model.tiles)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
 			}
 		}
 	});
@@ -12539,6 +12542,7 @@ var _user$project$Main$toDom = F2(
 				});
 		}
 	});
+var _user$project$Main$Reset = {ctor: 'Reset'};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -12551,7 +12555,11 @@ var _user$project$Main$view = function (model) {
 			ctor: '::',
 			_0: A2(
 				_elm_lang$html$Html$h1,
-				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$Reset),
+					_1: {ctor: '[]'}
+				},
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html$text('Tic-Tac-Toe'),
@@ -12580,7 +12588,7 @@ var _user$project$Main$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"message":"Main.Msg","aliases":{"Main.Position":{"type":"( Int, Int )","args":[]}},"unions":{"Main.Msg":{"tags":{"Fill":["Main.Position","Main.Player"],"Play":["Main.Position"]},"args":[]},"Main.Player":{"tags":{"O":[],"X":[]},"args":[]}}},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"message":"Main.Msg","aliases":{"Main.Position":{"type":"( Int, Int )","args":[]}},"unions":{"Main.Msg":{"tags":{"Fill":["Main.Position","Main.Player"],"Reset":[],"Play":["Main.Position"]},"args":[]},"Main.Player":{"tags":{"O":[],"X":[]},"args":[]}}},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])
