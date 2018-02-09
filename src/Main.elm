@@ -31,7 +31,8 @@ positions =
 
 
 type alias Board =
-    { tiles : Dict Position Player
+    { turn : Player
+    , tiles : Dict Position Player
     }
 
 
@@ -41,7 +42,8 @@ type alias Model =
 
 defaultModel : Model
 defaultModel =
-    { tiles = Dict.empty
+    { turn = O
+    , tiles = Dict.empty
     }
 
 
@@ -51,12 +53,21 @@ init =
 
 
 type Msg
-    = Fill Position Player
+    = Play Position
+    | Fill Position Player
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        Play position ->
+            let
+                player = case model.turn of
+                    X -> O
+                    O -> X
+            in
+                update (Fill position player) { model | turn = player }
+
         Fill position player ->
             ( { model | tiles = Dict.insert position player model.tiles }, Cmd.none )
 
@@ -69,7 +80,7 @@ toDom tiles position =
     in
         case tile of
             Nothing ->
-                div [ class "tile", onClick (Fill position X) ] []
+                div [ class "tile", onClick (Play position) ] []
 
             Just player ->
                 div [ class "tile" ] [ text (toString player) ]
