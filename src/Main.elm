@@ -62,13 +62,17 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Reset ->
-            (defaultModel, Cmd.none)
+            ( defaultModel, Cmd.none )
 
         Play position ->
             let
-                nextTurn = case model.turn of
-                    X -> O
-                    O -> X
+                nextTurn =
+                    case model.turn of
+                        X ->
+                            O
+
+                        O ->
+                            X
             in
                 update (Fill position nextTurn) { model | turn = nextTurn }
 
