@@ -74,7 +74,10 @@ update msg model =
                         O ->
                             X
             in
-                update (Fill position nextTurn) { model | turn = nextTurn }
+                if position == (1, 1) then
+                    update Reset model
+                else
+                    update (Fill position nextTurn) { model | turn = nextTurn }
 
         Fill position player ->
             ( { model | tiles = Dict.insert position player model.tiles }, Cmd.none )

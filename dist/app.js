@@ -12468,51 +12468,14 @@ var _user$project$Main$Fill = F2(
 	function (a, b) {
 		return {ctor: 'Fill', _0: a, _1: b};
 	});
-var _user$project$Main$update = F2(
-	function (msg, model) {
-		update:
-		while (true) {
-			var _p0 = msg;
-			switch (_p0.ctor) {
-				case 'Reset':
-					return {ctor: '_Tuple2', _0: _user$project$Main$defaultModel, _1: _elm_lang$core$Platform_Cmd$none};
-				case 'Play':
-					var nextTurn = function () {
-						var _p1 = model.turn;
-						if (_p1.ctor === 'X') {
-							return _user$project$Main$O;
-						} else {
-							return _user$project$Main$X;
-						}
-					}();
-					var _v2 = A2(_user$project$Main$Fill, _p0._0, nextTurn),
-						_v3 = _elm_lang$core$Native_Utils.update(
-						model,
-						{turn: nextTurn});
-					msg = _v2;
-					model = _v3;
-					continue update;
-				default:
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{
-								tiles: A3(_elm_lang$core$Dict$insert, _p0._0, _p0._1, model.tiles)
-							}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-			}
-		}
-	});
 var _user$project$Main$Play = function (a) {
 	return {ctor: 'Play', _0: a};
 };
 var _user$project$Main$toDom = F2(
 	function (tiles, position) {
 		var tile = A2(_elm_lang$core$Dict$get, position, tiles);
-		var _p2 = tile;
-		if (_p2.ctor === 'Nothing') {
+		var _p0 = tile;
+		if (_p0.ctor === 'Nothing') {
 			return A2(
 				_elm_lang$html$Html$div,
 				{
@@ -12537,12 +12500,60 @@ var _user$project$Main$toDom = F2(
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html$text(
-						_elm_lang$core$Basics$toString(_p2._0)),
+						_elm_lang$core$Basics$toString(_p0._0)),
 					_1: {ctor: '[]'}
 				});
 		}
 	});
 var _user$project$Main$Reset = {ctor: 'Reset'};
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		update:
+		while (true) {
+			var _p1 = msg;
+			switch (_p1.ctor) {
+				case 'Reset':
+					return {ctor: '_Tuple2', _0: _user$project$Main$defaultModel, _1: _elm_lang$core$Platform_Cmd$none};
+				case 'Play':
+					var _p3 = _p1._0;
+					var nextTurn = function () {
+						var _p2 = model.turn;
+						if (_p2.ctor === 'X') {
+							return _user$project$Main$O;
+						} else {
+							return _user$project$Main$X;
+						}
+					}();
+					if (_elm_lang$core$Native_Utils.eq(
+						_p3,
+						{ctor: '_Tuple2', _0: 1, _1: 1})) {
+						var _v3 = _user$project$Main$Reset,
+							_v4 = model;
+						msg = _v3;
+						model = _v4;
+						continue update;
+					} else {
+						var _v5 = A2(_user$project$Main$Fill, _p3, nextTurn),
+							_v6 = _elm_lang$core$Native_Utils.update(
+							model,
+							{turn: nextTurn});
+						msg = _v5;
+						model = _v6;
+						continue update;
+					}
+				default:
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								tiles: A3(_elm_lang$core$Dict$insert, _p1._0, _p1._1, model.tiles)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+			}
+		}
+	});
 var _user$project$Main$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
