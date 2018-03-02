@@ -22,7 +22,7 @@ body {
     -moz-user-select: none;
 }
 
-.tile {
+.cell {
     display: flex;
     align-items: center;
     justify-content: center;
