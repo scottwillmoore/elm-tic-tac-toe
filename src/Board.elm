@@ -1,23 +1,6 @@
-module Board exposing (..)
+module Board exposing (positions, straights)
 
-import Dict exposing (Dict)
-
-
-type Player
-    = X
-    | O
-
-
-type alias Position =
-    ( Int, Int )
-
-
-type alias Cell =
-    Maybe Player
-
-
-type alias Board =
-    Dict Position Player
+import Types exposing (..)
 
 
 product : List a -> List a -> List (List a)

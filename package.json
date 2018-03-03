@@ -8,8 +8,8 @@
     "license": "MIT",
     "scripts": {
         "clean": "shx rm dist/app.js",
-        "debug": "elm-live src/Main.elm --output=dist/app.js --debug --path-to-elm-make=node_modules/.bin/elm-make --dir=dist",
-        "build": "elm-make src/Main.elm --output=dist/app.js",
+        "debug": "elm-live src/App.elm --output=dist/app.js --debug --path-to-elm-make=node_modules/.bin/elm-make --dir=dist",
+        "build": "elm-make src/App.elm --output=dist/app.js",
         "deploy": ""
     },
     "devDependencies": {
