@@ -35,26 +35,26 @@ update msg model =
             ( defaultModel, Cmd.none )
 
         CellClicked position ->
-            let
-                ( nextBoard, placed ) =
-                    Board.place model.board model.turn position
+            if model.status == Play then
+                let
+                    ( nextBoard, placed ) =
+                        Board.place model.board model.turn position
 
-                nextTurn =
-                    if placed then
-                        swapPlayer model.turn
-                    else
-                        model.turn
+                    nextTurn =
+                        if placed then
+                            swapPlayer model.turn
+                        else
+                            model.turn
 
-                nextStatus =
-                    Board.status nextBoard
+                    nextStatus =
+                        Board.status nextBoard
 
-                nextModel =
-                    { model | board = nextBoard, turn = nextTurn, status = nextStatus }
-            in
-                if nextStatus == Play then
+                    nextModel =
+                        { model | board = nextBoard, turn = nextTurn, status = nextStatus }
+                in
                     ( nextModel, Cmd.none )
-                else
-                    ( defaultModel, Cmd.none )
+            else
+                ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg

@@ -8,9 +8,9 @@ An implementation of the game Tic-Tac-Toe in Elm.
 
 ❌ ️Create a deploy script to deploy to the `gh-pages` branch.
 
-✔️  Display the Tic-Tac-Toe board.
+✔️ Display the Tic-Tac-Toe board.
 
-❌ Allow two players to play a game against each other.
+✔️ Allow two players to play a game against each other.
 
 ❌ Allow one player to play a game against the computer.
 

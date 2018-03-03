@@ -44,16 +44,35 @@ indexedMap f board =
     board |> toIndexedList |> List.map (\tuple -> f (Tuple.first tuple) (Tuple.second tuple))
 
 
+checkStraight : Board -> List Position -> Cell
+checkStraight board straight =
+    let
+        cells =
+            straight |> List.map (get board)
+    in
+        if List.all ((==) (Just O)) cells then
+            Just O
+        else if List.all ((==) (Just X)) cells then
+            Just X
+        else
+            Nothing
+
+
 status : Board -> Status
 status board =
-    if
-        board
-            |> toList
-            |> List.all ((/=) Nothing)
-    then
-        Draw
-    else
-        Play
+    let
+        cells =
+            straights
+                |> List.map (checkStraight board)
+    in
+        if List.any ((==) (Just O)) cells then
+            Win O
+        else if List.any ((==) (Just X)) cells then
+            Win X
+        else if List.all ((/=) Nothing) (toList board) then
+            Draw
+        else
+            Play
 
 
 listProduct : List a -> List a -> List (List a)

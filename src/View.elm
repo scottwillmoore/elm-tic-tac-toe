@@ -3,7 +3,6 @@ module View exposing (view)
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
-import Dict exposing (Dict)
 import Types exposing (..)
 import Board exposing (..)
 
@@ -29,4 +28,5 @@ view model =
     div [ class "app" ]
         [ h1 [ onClick Reset ] [ text "Tic-Tac-Toe" ]
         , viewBoard model.board
+        , div [] [ text (toString model.status) ]
         ]
