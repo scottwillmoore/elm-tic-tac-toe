@@ -21,6 +21,12 @@ type Player
     | O
 
 
+type State
+    = Winner Player
+    | Draw
+    | Play
+
+
 type alias Position =
     ( Int, Int )
 
@@ -59,34 +65,9 @@ positions =
         |> List.map (tuple2 ( 0, 0 ))
 
 
-
--- board layout
--- 0 1 2
--- 3 4 5
--- 6 7 8
---
--- 0  1  2  3
--- 4  5  6  7
--- 8  9  10 11
--- 12 13 14 15
---
--- (1,1) (2,1) (3,1)
--- (1,2) (2,2) (3,2)
--- (1,3) (2,3) (3,3)
---
--- horizontals
--- f(x) = ( x*3, x*3 + 1, x*3 + 2 )
--- verticals
--- f(x) = ( x, x + 3, x + 6 )
--- diagonals
--- f(x) = ( x, x + 4, x + 8 )
--- f(x) = ( x, x + 2, x + 4 )
-
-
 horizontal : Int -> List Position
 horizontal n =
-    positions
-        |> List.filter (Tuple.second >> (==) n)
+    positions |> List.filter (Tuple.second >> (==) n)
 
 
 horizontals : List (List Position)
@@ -96,8 +77,7 @@ horizontals =
 
 vertical : Int -> List Position
 vertical n =
-    positions
-        |> List.filter (Tuple.first >> (==) n)
+    positions |> List.filter (Tuple.first >> (==) n)
 
 
 verticals : List (List Position)
@@ -105,15 +85,30 @@ verticals =
     List.range 1 3 |> List.map vertical
 
 
-diagonals : List (List Position)
-diagonals =
-    [ positions
+majorDiagonal : List Position
+majorDiagonal =
+    positions
         |> List.filter
             (\position -> Tuple.first position == Tuple.second position)
-    , positions
+
+
+minorDiagonal : List Position
+minorDiagonal =
+    positions
         |> List.filter
             (\position -> Tuple.first position == 4 - (Tuple.second position))
+
+
+diagonals : List (List Position)
+diagonals =
+    [ majorDiagonal
+    , minorDiagonal
     ]
+
+
+straights : List (List Position)
+straights =
+    horizontals ++ verticals ++ diagonals
 
 
 type alias Model =
@@ -166,9 +161,19 @@ attemptPlacement model board player position =
                 model
 
 
-checkStatus : Board -> Bool
-checkStatus board =
-    False
+checkStraight : Board -> Player -> List Position -> Bool
+checkStraight board player straight =
+    straight |> List.all (\position -> (Dict.get position board) == Just player)
+
+
+checkState : Board -> State
+checkState board =
+    if checkStraight board O majorDiagonal then
+        Winner O
+    else if checkStraight board X majorDiagonal then
+        Winner X
+    else
+        Play
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -182,13 +187,18 @@ update msg model =
                 nextModel =
                     attemptPlacement model model.board model.turn position
 
-                reset =
-                    checkStatus nextModel.board
+                state =
+                    checkState nextModel.board
             in
-                if reset then
-                    ( defaultModel, Cmd.none )
-                else
-                    ( nextModel, Cmd.none )
+                case state of
+                    Winner player ->
+                        ( defaultModel, Cmd.none )
+
+                    Draw ->
+                        ( defaultModel, Cmd.none )
+
+                    Play ->
+                        ( nextModel, Cmd.none )
 
 
 viewCell : Position -> Cell -> Html Msg
