@@ -1,20 +1,73 @@
-module Board exposing (positions, straights)
+module Board exposing (set, get, place, toList, toIndexedList, map, indexedMap, status)
 
+import Dict exposing (Dict)
 import Types exposing (..)
 
 
-product : List a -> List a -> List (List a)
-product xs ys =
+set : Board -> Player -> Position -> Board
+set board player position =
+    Dict.insert position player board
+
+
+get : Board -> Position -> Cell
+get board position =
+    Dict.get position board
+
+
+place : Board -> Player -> Position -> ( Board, Bool )
+place board player position =
+    case get board position of
+        Just player ->
+            ( board, False )
+
+        Nothing ->
+            ( set board player position, True )
+
+
+toList : Board -> List Cell
+toList board =
+    positions |> List.map (get board)
+
+
+toIndexedList : Board -> List ( Cell, Position )
+toIndexedList board =
+    positions |> List.map (\position -> ( get board position, position ))
+
+
+map : (Cell -> a) -> Board -> List a
+map f board =
+    board |> toList |> List.map f
+
+
+indexedMap : (Cell -> Position -> a) -> Board -> List a
+indexedMap f board =
+    board |> toIndexedList |> List.map (\tuple -> f (Tuple.first tuple) (Tuple.second tuple))
+
+
+status : Board -> Status
+status board =
+    if
+        board
+            |> toList
+            |> List.all ((/=) Nothing)
+    then
+        Draw
+    else
+        Play
+
+
+listProduct : List a -> List a -> List (List a)
+listProduct xs ys =
     case xs of
         [] ->
             []
 
         z :: zs ->
-            List.foldr (\a b -> [ a, z ] :: b) [] ys ++ product zs ys
+            List.foldr (\a b -> [ a, z ] :: b) [] ys ++ listProduct zs ys
 
 
-tuple2 : ( a, a ) -> List a -> ( a, a )
-tuple2 default list =
+listToTuple2 : ( a, a ) -> List a -> ( a, a )
+listToTuple2 default list =
     case list of
         [ a, b ] ->
             ( a, b )
@@ -25,8 +78,8 @@ tuple2 default list =
 
 positions : List Position
 positions =
-    product [ 1, 2, 3 ] [ 1, 2, 3 ]
-        |> List.map (tuple2 ( 0, 0 ))
+    listProduct [ 1, 2, 3 ] [ 1, 2, 3 ]
+        |> List.map (listToTuple2 ( 0, 0 ))
 
 
 horizontal : Int -> List Position

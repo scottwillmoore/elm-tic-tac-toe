@@ -8,8 +8,8 @@ import Types exposing (..)
 import Board exposing (..)
 
 
-viewCell : Position -> Cell -> Html Msg
-viewCell position cell =
+viewCell : Cell -> Position -> Html Msg
+viewCell cell position =
     div [ class "cell", onClick (CellClicked position) ]
         [ text
             (cell
@@ -21,15 +21,7 @@ viewCell position cell =
 
 viewBoard : Board -> Html Msg
 viewBoard board =
-    div [ class "board" ]
-        (positions
-            |> List.map
-                (\position ->
-                    board
-                        |> Dict.get position
-                        |> viewCell position
-                )
-        )
+    div [ class "board" ] (board |> Board.indexedMap viewCell)
 
 
 view : Model -> Html Msg

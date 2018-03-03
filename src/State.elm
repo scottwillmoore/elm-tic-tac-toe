@@ -2,12 +2,14 @@ module State exposing (init, update, subscriptions)
 
 import Dict exposing (Dict)
 import Types exposing (..)
+import Board
 
 
 defaultModel : Model
 defaultModel =
     { turn = O
     , board = Dict.empty
+    , status = Play
     }
 
 
@@ -26,33 +28,6 @@ swapPlayer player =
             X
 
 
-attemptPlacement : Model -> Board -> Player -> Position -> Model
-attemptPlacement model board player position =
-    let
-        cell =
-            Dict.get position board
-    in
-        case cell of
-            Nothing ->
-                { model
-                    | turn = swapPlayer player
-                    , board = Dict.insert position player board
-                }
-
-            Just player ->
-                model
-
-
-checkStraight : Board -> Player -> List Position -> Bool
-checkStraight board player straight =
-    straight |> List.all (\position -> (Dict.get position board) == Just player)
-
-
-checkState : Board -> Status
-checkState board =
-    Play
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -61,21 +36,25 @@ update msg model =
 
         CellClicked position ->
             let
+                ( nextBoard, placed ) =
+                    Board.place model.board model.turn position
+
+                nextTurn =
+                    if placed then
+                        swapPlayer model.turn
+                    else
+                        model.turn
+
+                nextStatus =
+                    Board.status nextBoard
+
                 nextModel =
-                    attemptPlacement model model.board model.turn position
-
-                state =
-                    checkState nextModel.board
+                    { model | board = nextBoard, turn = nextTurn, status = nextStatus }
             in
-                case state of
-                    Win player ->
-                        ( defaultModel, Cmd.none )
-
-                    Draw ->
-                        ( defaultModel, Cmd.none )
-
-                    Play ->
-                        ( nextModel, Cmd.none )
+                if nextStatus == Play then
+                    ( nextModel, Cmd.none )
+                else
+                    ( defaultModel, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg

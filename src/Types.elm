@@ -34,4 +34,5 @@ type alias Board =
 type alias Model =
     { turn : Player
     , board : Board
+    , status : Status
     }
