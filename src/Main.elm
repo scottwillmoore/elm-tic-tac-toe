@@ -3,7 +3,6 @@ module Main exposing (..)
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
-import Array exposing (Array)
 import Dict exposing (Dict)
 
 
@@ -60,6 +59,63 @@ positions =
         |> List.map (tuple2 ( 0, 0 ))
 
 
+
+-- board layout
+-- 0 1 2
+-- 3 4 5
+-- 6 7 8
+--
+-- 0  1  2  3
+-- 4  5  6  7
+-- 8  9  10 11
+-- 12 13 14 15
+--
+-- (1,1) (2,1) (3,1)
+-- (1,2) (2,2) (3,2)
+-- (1,3) (2,3) (3,3)
+--
+-- horizontals
+-- f(x) = ( x*3, x*3 + 1, x*3 + 2 )
+-- verticals
+-- f(x) = ( x, x + 3, x + 6 )
+-- diagonals
+-- f(x) = ( x, x + 4, x + 8 )
+-- f(x) = ( x, x + 2, x + 4 )
+
+
+horizontal : Int -> List Position
+horizontal n =
+    positions
+        |> List.filter (Tuple.second >> (==) n)
+
+
+horizontals : List (List Position)
+horizontals =
+    List.range 1 3 |> List.map horizontal
+
+
+vertical : Int -> List Position
+vertical n =
+    positions
+        |> List.filter (Tuple.first >> (==) n)
+
+
+verticals : List (List Position)
+verticals =
+    List.range 1 3 |> List.map vertical
+
+
+diagonals : List (List Position)
+diagonals =
+    [ positions
+        |> List.filter
+            (\position -> Tuple.first position == Tuple.second position)
+    , positions
+        |> List.filter
+            (\position -> Tuple.first position == 4 - (Tuple.second position))
+    ]
+
+
 type alias Model =
     { turn : Player
     , board : Board
@@ -81,14 +137,6 @@ init =
 type Msg
     = Reset
     | CellClicked Position
-
-
-
--- CellClicked
--- |> attemptPlacement
--- |> swapTurn
--- |> checkBoard
--- |>
 
 
 swapPlayer : Player -> Player
