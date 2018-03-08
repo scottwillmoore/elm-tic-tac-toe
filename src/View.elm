@@ -36,10 +36,16 @@ viewBoard board =
     div [ class "board" ] (board |> Board.indexedMap viewCell)
 
 
+viewScore : Html Msg
+viewScore =
+    div [ class "score" ] [ div [ class "score-value" ] [] ]
+
+
 view : Model -> Html Msg
 view model =
     div [ class "app" ]
         [ h1 [ onClick Reset ] [ text "Tic-Tac-Toe" ]
         , viewBoard model.board
+        , viewScore
         , p [] [ text (toString model.status) ]
         ]
