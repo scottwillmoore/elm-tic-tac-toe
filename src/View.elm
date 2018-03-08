@@ -7,14 +7,27 @@ import Types exposing (..)
 import Board exposing (..)
 
 
+none : Html Msg
+none =
+    text ""
+
+
+viewPlayer : Player -> Html Msg
+viewPlayer player =
+    case player of
+        O ->
+            div [ class "player player-o" ] [ text (toString player) ]
+
+        X ->
+            div [ class "player player-x" ] [ text (toString player) ]
+
+
 viewCell : Cell -> Position -> Html Msg
 viewCell cell position =
     div [ class "cell", onClick (CellClicked position) ]
-        [ text
-            (cell
-                |> Maybe.map toString
-                |> Maybe.withDefault ""
-            )
+        [ cell
+            |> Maybe.map viewPlayer
+            |> Maybe.withDefault none
         ]
 
 
@@ -28,5 +41,5 @@ view model =
     div [ class "app" ]
         [ h1 [ onClick Reset ] [ text "Tic-Tac-Toe" ]
         , viewBoard model.board
-        , div [] [ text (toString model.status) ]
+        , p [] [ text (toString model.status) ]
         ]

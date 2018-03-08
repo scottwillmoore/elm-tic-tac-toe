@@ -4,27 +4,70 @@ body {
     margin: 0;
     height: 100%;
     display: flex;
-    align-items: center;
+    align-content: center;
     justify-content: center;
+    background-color: #95afc0;
 }
 
-.app {}
+.app {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    color: #333333;
+    font-size: 24px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+h1,
+p {
+    display: none;
+}
 
 .board {
-    width: 500px;
-    height: 500px;
+    width: 30vw;
+    height: 30vw;
     display: grid;
     grid-template-rows: repeat(3, 1fr);
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 6px;
-    background: #eeeeee;
+    grid-gap: 8px;
     user-select: none;
     -moz-user-select: none;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .cell {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ffffff;
+    background-color: #535c68;
+    border-radius: 8px;
+}
+
+.player {
+    width: 100%;
+    height: 100%;
+    font-size: 0px;
+    animation: 1s ease-in backwards fade-in;
+    border-radius: 4px;
+}
+
+.player-o {
+    background-color: #686de0;
+}
+
+.player-x {
+    background-color: #ff7979;
+}
+
+.player-win {
+    box-sizing: border-box;
+    border: 5px solid #ffffff;
 }
