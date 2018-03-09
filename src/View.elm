@@ -1,8 +1,10 @@
 module View exposing (view)
 
-import Html exposing (..)
-import Html.Events exposing (..)
-import Html.Attributes exposing (..)
+import Html exposing (Html, text, div, h1, p)
+import Html.Events exposing (onClick)
+import Html.Attributes exposing (class)
+import Svg exposing (svg, circle, line)
+import Svg.Attributes exposing (viewBox, cx, cy, r, x1, y1, x2, y2, fill, strokeWidth)
 import Types exposing (..)
 import Board exposing (..)
 
@@ -12,14 +14,24 @@ none =
     text ""
 
 
+class2 : String -> Svg.Attribute msg
+class2 msg =
+    Svg.Attributes.class msg
+
+
 viewPlayer : Player -> Html Msg
 viewPlayer player =
     case player of
         O ->
-            div [ class "player player-o" ] [ text (toString player) ]
+            svg [ class2 "player o", viewBox "0 0 10 10" ]
+                [ circle [ cx "5", cy "5", r "4", fill "none", strokeWidth "1" ] []
+                ]
 
         X ->
-            div [ class "player player-x" ] [ text (toString player) ]
+            svg [ class2 "player x", viewBox "0 0 10 10" ]
+                [ line [ x1 "1", y1 "1", x2 "9", y2 "9", strokeWidth "1" ] []
+                , line [ x1 "9", y1 "1", x2 "1", y2 "9", strokeWidth "1" ] []
+                ]
 
 
 viewCell : Cell -> Position -> Html Msg

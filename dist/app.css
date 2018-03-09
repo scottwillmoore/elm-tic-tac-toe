@@ -5,7 +5,6 @@ body {
     height: 100%;
     display: flex;
     align-items: center;
-    align-content: center;
     justify-content: center;
     background-color: #95afc0;
 }
@@ -42,29 +41,49 @@ p {
 }
 
 .cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #535c68;
     border-radius: 8px;
 }
 
-.player {
-    width: 100%;
-    height: 100%;
-    font-size: 0px;
-    animation: 1s ease-in backwards fade-in;
-    border-radius: 4px;
-}
-
-.player-o {
-    background-color: #686de0;
-}
-
-.player-x {
-    background-color: #ff7979;
-}
-
-.player-win {
+.cell.win {
     box-sizing: border-box;
-    border: 5px solid #ffffff;
+    border: 5px solid #badc58;
+}
+
+.player {
+    width: 50%;
+    height: 50%;
+    stroke: #ff7979;
+    animation: 0.3s ease-in backwards fade-in;
+}
+
+.player.o {
+    stroke: #686de0;
+}
+
+.player.x {
+    stroke: #ff7979;
+}
+
+@keyframes draw-path {
+    from {
+        stroke-dasharray: 50;
+        stroke-dashoffset: 50;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.player>*:nth-child(1) {
+    animation: 0.5s ease-in both draw-path;
+}
+
+.player>*:nth-child(2) {
+    animation: 0.5s 0.2s ease-in both draw-path;
 }
 
 .score {
