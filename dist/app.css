@@ -52,18 +52,6 @@ body {
     right: calc(-20vh - 20vh);
 }
 
-.score {
-    display: none;
-}
-
-.score>.o {
-    color: #686de0;
-}
-
-.score>.x {
-    color: #ff7979;
-}
-
 .history>.result {
     overflow: hidden;
     animation: 0.5s ease-in backwards expand;
