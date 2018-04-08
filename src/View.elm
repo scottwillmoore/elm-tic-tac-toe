@@ -24,13 +24,13 @@ viewPlayer player =
     case player of
         O ->
             svg [ class2 "player o", viewBox "0 0 10 10" ]
-                [ circle [ cx "5", cy "5", r "4", fill "none", strokeWidth "1" ] []
+                [ circle [ cx "5", cy "5", r "4", fill "none", strokeWidth "0.4" ] []
                 ]
 
         X ->
             svg [ class2 "player x", viewBox "0 0 10 10" ]
-                [ line [ x1 "1", y1 "1", x2 "9", y2 "9", strokeWidth "1" ] []
-                , line [ x1 "9", y1 "1", x2 "1", y2 "9", strokeWidth "1" ] []
+                [ line [ x1 "1", y1 "1", x2 "9", y2 "9", strokeWidth "0.4" ] []
+                , line [ x1 "9", y1 "1", x2 "1", y2 "9", strokeWidth "0.4" ] []
                 ]
 
 
@@ -48,16 +48,10 @@ viewBoard board =
     div [ class "board" ] (board |> Board.indexedMap viewCell)
 
 
-viewScore : Html Msg
-viewScore =
-    div [ class "score" ] [ div [ class "score-value" ] [] ]
-
-
 view : Model -> Html Msg
 view model =
     div [ class "app" ]
         [ h1 [ onClick Reset ] [ text "Tic-Tac-Toe" ]
         , viewBoard model.board
-        , viewScore
         , p [] [ text (toString model.status) ]
         ]
