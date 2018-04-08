@@ -1,6 +1,7 @@
 module View exposing (view)
 
-import Html exposing (Html, text, div, span, h1, p)
+import Html exposing (Html, Attribute, text, div, span, h1, p)
+import Html.Keyed
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (class)
 import Svg exposing (svg, circle, line)
@@ -17,6 +18,11 @@ none =
 class2 : String -> Svg.Attribute msg
 class2 msg =
     Svg.Attributes.class msg
+
+
+kdiv : List (Attribute msg) -> List ( String, Html msg ) -> Html msg
+kdiv attributes children =
+    Html.Keyed.node "div" attributes children
 
 
 viewPlayer : Player -> Html Msg
@@ -48,31 +54,41 @@ viewBoard board =
     div [ class "board" ] (board |> Board.indexedMap viewCell)
 
 
-viewScore : ( Int, Int ) -> Html Msg
-viewScore ( o, x ) =
-    div [ class "score" ]
-        [ span [ class "o" ] [ text (toString o) ]
-        , span [] [ text " - " ]
-        , span [ class "x" ] [ text (toString x) ]
-        ]
+viewStatus : Status -> List (Html Msg)
+viewStatus status =
+    case status of
+        Play ->
+            []
+
+        Draw ->
+            [ p [] [ text "Draw" ]
+            , div [] [ viewPlayer O, viewPlayer X ]
+            ]
+
+        Win player ->
+            [ p [] [ text "Win" ]
+            , div [] [ viewPlayer player ]
+            ]
 
 
-viewResult : Cell -> Html Msg
-viewResult cell =
-    div [ class "result" ] [ viewPlayer (Maybe.withDefault X cell) ]
+viewResult : Int -> Status -> ( String, Html Msg )
+viewResult index status =
+    ( toString index, div [ class "result" ] (viewStatus status) )
 
 
-viewHistory : List Cell -> Html Msg
+viewHistory : List Status -> Html Msg
 viewHistory history =
-    div [ class "history" ] (history |> List.map viewResult)
+    kdiv [ class "history" ]
+        (history
+            |> List.reverse
+            |> List.indexedMap viewResult
+            |> List.reverse
+        )
 
 
 view : Model -> Html Msg
 view model =
     div [ class "app" ]
-        [ div [ class "aside" ]
-            [ viewScore ( 1, 1 ) -- TODO: remove score?
-            , viewHistory model.history
-            ]
+        [ div [ class "aside" ] [ viewHistory model.history ]
         , viewBoard model.board
         ]

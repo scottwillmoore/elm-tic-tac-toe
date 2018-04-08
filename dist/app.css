@@ -20,6 +20,15 @@
     }
 }
 
+@keyframes expand {
+    from {
+        max-height: 0px;
+    }
+    to {
+        max-height: 100px;
+    }
+}
+
 html,
 head,
 body {
@@ -37,6 +46,8 @@ body {
 
 .aside {
     width: 20vh;
+    height: 50vh;
+    overflow: hidden;
     position: absolute;
     right: calc(-20vh - 20vh);
 }
@@ -54,12 +65,26 @@ body {
 }
 
 .history>.result {
-    margin-bottom: 20px;
+    overflow: hidden;
+    animation: 0.5s ease-in backwards expand;
 }
 
-.history>.result>svg {
+.history>.result p {
+    font-size: 1.5vh;
+    line-height: 2vh;
+    font-weight: 300;
+    margin: 0;
+    margin-bottom: 1vh;
+}
+
+.history>.result div {
+    line-height: 0;
+}
+
+.history>.result svg {
     height: 5vh;
     width: 5vh;
+    margin-bottom: 2vh;
 }
 
 .board {

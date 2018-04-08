@@ -29,8 +29,8 @@ swapPlayer player =
             X
 
 
-updateBoard : Model -> Position -> ( Model, Cmd Msg )
-updateBoard model position =
+updateBoard : Position -> Model -> Model
+updateBoard position model =
     let
         ( nextBoard, placed ) =
             Board.place model.board model.turn position
@@ -43,11 +43,15 @@ updateBoard model position =
 
         nextStatus =
             Board.status nextBoard
-
-        nextModel =
-            { model | board = nextBoard, turn = nextTurn, status = nextStatus }
     in
-        ( nextModel, Cmd.none )
+        if nextStatus == Play then
+            { model | board = nextBoard, turn = nextTurn, status = nextStatus }
+        else
+            let
+                nextHistory =
+                    nextStatus :: model.history
+            in
+                { defaultModel | history = nextHistory }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -57,15 +61,11 @@ update msg model =
             ( defaultModel, Cmd.none )
 
         CellClicked position ->
-            case model.status of
-                Play ->
-                    updateBoard model position
-
-                Draw ->
-                    ( defaultModel, Cmd.none )
-
-                Win _ ->
-                    ( defaultModel, Cmd.none )
+            let
+                nextModel =
+                    updateBoard position model
+            in
+                ( nextModel, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
