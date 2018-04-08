@@ -10,6 +10,7 @@ defaultModel =
     { turn = O
     , board = Dict.empty
     , status = Play
+    , history = []
     }
 
 
@@ -28,6 +29,27 @@ swapPlayer player =
             X
 
 
+updateBoard : Model -> Position -> ( Model, Cmd Msg )
+updateBoard model position =
+    let
+        ( nextBoard, placed ) =
+            Board.place model.board model.turn position
+
+        nextTurn =
+            if placed then
+                swapPlayer model.turn
+            else
+                model.turn
+
+        nextStatus =
+            Board.status nextBoard
+
+        nextModel =
+            { model | board = nextBoard, turn = nextTurn, status = nextStatus }
+    in
+        ( nextModel, Cmd.none )
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -35,26 +57,15 @@ update msg model =
             ( defaultModel, Cmd.none )
 
         CellClicked position ->
-            if model.status == Play then
-                let
-                    ( nextBoard, placed ) =
-                        Board.place model.board model.turn position
+            case model.status of
+                Play ->
+                    updateBoard model position
 
-                    nextTurn =
-                        if placed then
-                            swapPlayer model.turn
-                        else
-                            model.turn
+                Draw ->
+                    ( defaultModel, Cmd.none )
 
-                    nextStatus =
-                        Board.status nextBoard
-
-                    nextModel =
-                        { model | board = nextBoard, turn = nextTurn, status = nextStatus }
-                in
-                    ( nextModel, Cmd.none )
-            else
-                ( model, Cmd.none )
+                Win _ ->
+                    ( defaultModel, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg

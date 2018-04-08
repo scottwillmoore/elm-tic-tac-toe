@@ -35,4 +35,5 @@ type alias Model =
     { turn : Player
     , board : Board
     , status : Status
+    , history : List Cell
     }

@@ -1,6 +1,6 @@
 module View exposing (view)
 
-import Html exposing (Html, text, div, h1, p)
+import Html exposing (Html, text, div, span, h1, p)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (class)
 import Svg exposing (svg, circle, line)
@@ -48,10 +48,31 @@ viewBoard board =
     div [ class "board" ] (board |> Board.indexedMap viewCell)
 
 
+viewScore : ( Int, Int ) -> Html Msg
+viewScore ( o, x ) =
+    div [ class "score" ]
+        [ span [ class "o" ] [ text (toString o) ]
+        , span [] [ text " - " ]
+        , span [ class "x" ] [ text (toString x) ]
+        ]
+
+
+viewResult : Cell -> Html Msg
+viewResult cell =
+    div [ class "result" ] [ viewPlayer (Maybe.withDefault X cell) ]
+
+
+viewHistory : List Cell -> Html Msg
+viewHistory history =
+    div [ class "history" ] (history |> List.map viewResult)
+
+
 view : Model -> Html Msg
 view model =
     div [ class "app" ]
-        [ h1 [ onClick Reset ] [ text "Tic-Tac-Toe" ]
+        [ div [ class "aside" ]
+            [ viewScore ( 1, 1 ) -- TODO: remove score?
+            , viewHistory model.history
+            ]
         , viewBoard model.board
-        , p [] [ text (toString model.status) ]
         ]
